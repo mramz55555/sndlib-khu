@@ -1,7 +1,10 @@
 package org.isoft;
 
 import jakarta.xml.bind.annotation.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;

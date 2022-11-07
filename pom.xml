@@ -18,13 +18,12 @@
     <dependency>
       <groupId>jakarta.xml.bind</groupId>
       <artifactId>jakarta.xml.bind-api</artifactId>
-      <version>3.0.0</version>
+      <version>4.0.0</version>
     </dependency>
     <dependency>
-      <groupId>com.sun.xml.bind</groupId>
-      <artifactId>jaxb-impl</artifactId>
-      <version>3.0.0</version>
-      <scope>runtime</scope>
+      <groupId>org.glassfish.jaxb</groupId>
+      <artifactId>jaxb-runtime</artifactId>
+      <version>4.0.0</version>
     </dependency>
     <dependency>
       <groupId>org.projectlombok</groupId>
@@ -34,9 +33,45 @@
   </dependencies>
 
   <build>
+    <resources>
+      <!-- resource processsing with a different output directory
+           for logback.xml -->
+      <resource>
+        <directory>src/main/java/resources</directory>
+        <includes>
+          <include>abilene.xml</include>
+        </includes>
+        <!-- relative to target/classes
+             i.e. ${project.build.outputDirectory} -->
+        <targetPath>${project.build.outputDirectory}</targetPath>
+      </resource>
+    </resources>
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
       <plugins>
         <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <configuration>
+            <descriptorRefs>
+              <descriptorRef>jar-with-dependencies</descriptorRef>
+            </descriptorRefs>
+            <archive>
+              <manifest>
+                <mainClass>org.isoft.Main</mainClass>
+              </manifest>
+            </archive>
+          </configuration>
+          <executions>
+            <execution>
+              <id>make-assembly</id>
+              <phase>package</phase>
+              <goals>
+                <goal>single</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
         <plugin>
           <artifactId>maven-clean-plugin</artifactId>
           <version>3.1.0</version>
@@ -56,7 +91,16 @@
         </plugin>
         <plugin>
           <artifactId>maven-jar-plugin</artifactId>
-          <version>3.0.2</version>
+                <version>3.1.0</version>
+                <configuration>
+                  <archive>
+                    <manifest>
+                      <addClasspath>true</addClasspath>
+                      <classpathPrefix>lib/</classpathPrefix>
+                      <mainClass>org.isoft.Main</mainClass>
+                    </manifest>
+                  </archive>
+                </configuration>
         </plugin>
         <plugin>
           <artifactId>maven-install-plugin</artifactId>

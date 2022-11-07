@@ -4,28 +4,21 @@ import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
 
 public class Main {
-    private static final String sourcePath = System.getProperty("user.dir") + "\\src\\main\\java\\resources\\abilene.xml";
-    private static final String destinationPath = System.getProperty("user.dir") + "\\src\\main\\java\\resources\\Topology.inc";
     private static BufferedWriter output;
     private static int lastIndex=-1;
-    private static final String COMMA=",";
-    private static final String DOT=".";
 
     public static void main(String[] args) {
-        try (BufferedWriter output =Main.output= new BufferedWriter(new FileWriter(destinationPath))){
+        try (BufferedWriter output =Main.output= new BufferedWriter(new FileWriter(System.getProperty("user.dir") + "\\Topology.inc"))){
             //parsing xml
             JAXBContext context = JAXBContext.newInstance(Network.class, Node.class, Demand.class, Node.Coordinates.class,
                     Network.NetworkStructure.class, Network.Meta.class, Network.NetworkStructure.Link.class);
 
             Unmarshaller unmarshaller = context.createUnmarshaller();
-            Network network = (Network) unmarshaller.unmarshal(new File(sourcePath));
+            Network network = (Network) unmarshaller.unmarshal(Main.class.getResourceAsStream("/abilene.xml"));
 
             //writing in file
 
